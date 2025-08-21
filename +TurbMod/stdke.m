@@ -1,0 +1,13 @@
+function [dkdt,dedt] = stdke(settings, params, S)
+%STDKE: STD k-epsilon formulation of dkdt, dedt
+% Reference: Launder & Spalding, 1974
+
+% RHS in prognostic equation for TKE dissipation rate
+T_e = FD.CDS2_1(settings.zCell, S.nu_t/params.sig_e) .* S.dedz + (S.nu_t/params.sig_e) .* FD.CDS2_2(settings.zCell, S.e);
+D_e = (S.e.^2)./S.k; D_e(S.k == 0) = 0;
+
+% dkdt, dedt
+dkdt = S.P_s + S.P_b + S.T_k - S.e;
+dedt = params.C_1*(S.e./S.k).*S.P_s + params.C_3*(S.e./S.k).*S.P_b - params.C_2*D_e + T_e;  dedt(S.k==0) = 0;
+
+end
