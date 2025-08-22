@@ -19,5 +19,14 @@ Turbulence models:
 - Renormalization group k-epsilon model (Yakhot & Orszag, 1986)
 - MOST k-epsilon model (van der Laan et al., 2017)
 
+Intercomparison of mean predictions by different turbulence models with LES data:
+
+TNBL
+![tnbl](./plots/figs/scm_les_intercomparison_tnbl.png)
+
+SBL
+![sbl](./plots/figs/scm_les_intercomparison_sbl.png)
+
+
 Color scheme used: https://www.mathworks.com/matlabcentral/fileexchange/42673-beautiful-and-distinguishable-line-colors-colormap
 
