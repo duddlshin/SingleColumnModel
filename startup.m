@@ -19,7 +19,8 @@ addif(root);
 addif(fullfile(root, 'scripts'));    
 addif(fullfile(root, 'plots'));  
 addif(fullfile(root, 'tests'));      
-addif(fullfile(root, 'utils'));  
+addif(fullfile(root, 'utils'));
+addif(fullfile(root, 'data'));  
 
 fprintf('[startup] Project root set: %s\n', root);
 

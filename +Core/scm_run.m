@@ -13,28 +13,20 @@
 function [settings, params, avgVars, tsVars] = scm_run(case_name, end_time, timeavg, turb_model, new_params)
 
 % Input problem case
-% namelist_file = sprintf('./namelists/namelist_%s.m', case_name);
-% run(namelist_file);
-% fname = sprintf('Namelists.namelist_%s', char(case_name));
-% assert(exist(fname,'file')==2, 'Namelist not found: %s.m', fname);
-% settings = feval(fname);
-
 fname = sprintf('Namelists.namelist_%s', char(case_name));
 loc = which(fname);
 assert(~isempty(loc), 'Namelist not on path: %s.m', fname);
 settings = feval(fname);
 
-
-
 % Turbulence model and parameter settings
-settings.turb_model = turb_model;                                      % Assign turbulence model
-params = Params.assign_params(turb_model, new_params);                        % Assign turbulence model parameters
+settings.turb_model = turb_model;                                          % Assign turbulence model
+params = Params.assign_params(turb_model, new_params);                     % Assign turbulence model parameters
 
 % Time settings
-settings.end_time = end_time;                                          % Assign end time [s]
-settings.start_time = settings.end_time - timeavg;                     % Assign start time [s]    
-timesteps = 0:settings.dt:settings.end_time;                           % Discretize time
-convcriteria = 1e-8;                                                   % Convergence criteria
+settings.end_time = end_time;                                              % Assign end time [s]
+settings.start_time = settings.end_time - timeavg;                         % Assign start time [s]    
+timesteps = 0:settings.dt:settings.end_time;                               % Discretize time
+convcriteria = 1e-8;                                                       % Convergence criteria
 
 % Make storage variables
 tsVars = Store.make_storage(settings, single(0), 1, true);
@@ -67,21 +59,28 @@ for i=1:length(timesteps)-1
     if settings.timestep=="rk4"
         [u,v,T,k,e] = TimeInt.rk4(settings,params,u,v,T,k,e,uw_surf,vw_surf,ustar);
     end
+    
+    % Failure guard: NaN/Inf anywhere
+    bad = ~all(isfinite(u)) || ~all(isfinite(v)) || ~all(isfinite(T)) ...
+        || ~all(isfinite(k)) || ~all(isfinite(e));
 
     % Check convergence
-    if isnan(mean(u))
-        fprintf('Simulation fail. Algorithm has computed a NaN. \n');
+    if bad
+        fprintf('Simulation failed: non-finite detected (NaN/Inf) at step %d.\n', i);
+        IO.dump_on_fail(tsVars, settings, params, i, 'nonfinite');
         return;
-    elseif i>1 && i<settings.end_time/settings.dt
-        diffu = max(abs(tsVars.u(:,i)-tsVars.u(:,i-1)));
-        diffv = max(abs(tsVars.v(:,i)-tsVars.v(:,i-1)));
+    elseif i > 1 && i < settings.end_time / settings.dt
+        diffu = max(abs(tsVars.u(:,i) - tsVars.u(:,i-1)));
+        diffv = max(abs(tsVars.v(:,i) - tsVars.v(:,i-1)));
         if diffu < convcriteria && diffv < convcriteria
-            fprintf('Simulation finished. Algorithm has converged. \n');
+            fprintf('Simulation finished. Algorithm has converged at step %d.\n', i);
+            IO.dump_on_fail(tsVars, settings, params, i, 'earlystop');
             return;
         end
-    elseif i==settings.end_time/settings.dt
-        warning('Simulation success.\n');
+    elseif i == settings.end_time/settings.dt
+        warning('Simulation success: reached final step without early convergence.\n');
     end
+
 end
 
 % Time average variables over assigned averaging window

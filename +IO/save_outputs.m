@@ -53,7 +53,7 @@ run.meta = struct( ...
 run.settings = settings;
 run.params   = params;
 run.avg      = avgVars;
-run.ts       = tsVars;
+% run.ts       = tsVars; % this increases memory quite a bit
 
 % save
 save(matFile, 'run', opt.MatVersion);

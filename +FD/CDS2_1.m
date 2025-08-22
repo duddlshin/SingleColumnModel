@@ -4,7 +4,7 @@ function [ dvalddir ] = CDS2_1( dir, val )
 dir = dir(:);           
 val = val(:);   
 n = length(dir);
-dvalddir = zeros(n,1,'like',val);  
+dvalddir = zeros(n,1,'like',val);     
 
 % 2nd order forward difference
 dvalddir(1) = (-3 * val(1) + 4 * val(2) - val(3)) ./ (2 * (dir(2)-dir(1)));

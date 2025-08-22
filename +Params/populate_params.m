@@ -27,7 +27,7 @@ switch string(turb_model)
         params.C_3 = 1.0;
         params.C_e = params.C_0^3;
         params.C_mu = params.C_0^4;
-        params.C_h = 0.0013;
+        params.C_h = 0.0015;
         params.sig_k = 0.74;
         params.sig_e = 1.3;
     case {"rngke"}

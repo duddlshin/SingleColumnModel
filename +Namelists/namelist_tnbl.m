@@ -33,6 +33,7 @@ settings.g = 9.81;                                                         % Gra
 settings.kappa = 0.40;                                                     % von Karman constant [-]
 settings.potT0 = 263.5;                                                    % Reference potential temperature [K]
 settings.l_m = settings.kappa*settings.zCell./(1 + settings.kappa*settings.zCell/settings.lambda);    % Turbulent mixing length (Blackadar, 1962)
+settings.potTs = 300;                                                      % Reference surface potential temperature [K] 
 
 % Stability
 settings.A = 4.8;                                                          % Constant in stability formulation for momentum [-]

@@ -42,4 +42,11 @@ e = e + dt6*se;
 % Physical constraints
 k = max(k, 0);
 e = max(e, 0);
+
+% % temp
+% k(k < 0) = 0;
+% e(e < 0) = 0;
+
 end
+
+

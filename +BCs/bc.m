@@ -11,7 +11,7 @@ switch string(settings.casename)
         settings.L = Inf;
     case {"sbl"}
         % SURFFLUX2, Basu 2008
-        T(1) = 265 + settings.coolingrate*i*settings.dt/3600;   
+        T(1) = settings.potTs + settings.coolingrate*i*settings.dt/3600;   
         U = sqrt(u(1)^2 + v(1)^2);
         ustar = (U*settings.kappa)/(log(settings.zCell(1)/settings.z0) - settings.psi_M(1));
         delta_T = T(2) - T(1);
@@ -41,17 +41,7 @@ e(1) = ustar^3 / (settings.kappa * settings.zCell(1));
 % Upper BCs
 u(end) = settings.Gx;
 v(end) = settings.Gy;
-k(end) = 0;
-e(end) = 0;
 
-% % (Sponge region)
-% u(round(settings.nz*(1-settings.sponge)):end) = settings.Gx;
-% v(round(settings.nz*(1-settings.sponge)):end) = settings.Gy;
-% % k(round(settings.nz*(1-settings.sponge)):end) = 0;
-% if settings.casename == "sbl"
-%     T(round(settings.nz*(1-settings.sponge)):end) = 265 + 0.01*(settings.zCell(round(settings.nz*(1-settings.sponge)):end) - 100); 
-% elseif settings.casename == "tnbl"
-%     T(round(settings.nz*(1-settings.sponge)):end) = 300;
-% end
+% Sponge region (To do)
 
 end

@@ -8,6 +8,6 @@ D_e = (S.e.^2)./S.k; D_e(S.k == 0) = 0;
 
 % dkdt, dedt
 dkdt = S.P_s + S.P_b + S.T_k - S.e;
-dedt = (params.C_1*params.C_e*settings.f/params.C_h*S.ustar)*(S.k.^0.5).*S.P_s - params.C_2*D_e + T_e;  dedt(k==0) = 0;
+dedt = (params.C_1*params.C_e*settings.f/params.C_h*S.ustar)*(S.k.^0.5).*S.P_s - params.C_2*D_e + T_e;  dedt(S.k==0) = 0;
 
 end

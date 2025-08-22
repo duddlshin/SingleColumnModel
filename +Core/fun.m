@@ -3,7 +3,7 @@ function [dudt,dvdt,dTdt,dkdt,dedt] = fun(settings,params,u,v,T,k,e,uw_surf,vw_s
 % Locals 
 z   = settings.zCell(:);
 
-% Physical constraints
+% % Physical constraints
 k = max(k,0); 
 e = max(e,0);
 
@@ -11,16 +11,16 @@ e = max(e,0);
 [nu_t, alpha_t] = TurbMod.eddyviscosity(settings, params, k, e);
 
 % Gradients
-dudz = FD.CDS2_1(z, u);    
+dudz = FD.CDS2_1(z, u);
 dvdz = FD.CDS2_1(z, v);
-dTdz = FD.CDS2_1(z, T);    
-dkdz = FD.CDS2_1(z, k);
-dedz = FD.CDS2_1(z, e);
+dTdz = FD.CDS2_1(z, T);
+dkdz = FD.CDS2_1(z, k); dkdz(end) = 0;
+dedz = FD.CDS2_1(z, e); dedz(end) = 0;
 
 % Fluxes (apply bottom BCs)
-uw = -nu_t .* dudz; uw(1) = uw_surf; uw(end) = 0;
-vw = -nu_t .* dvdz; vw(1) = vw_surf; vw(end) = 0;
-wT = -alpha_t .* dTdz; wT(1) = 0; wT(end) = 0;
+uw = -nu_t .* dudz; uw(1) = uw_surf; 
+vw = -nu_t .* dvdz; vw(1) = vw_surf; 
+wT = -alpha_t .* dTdz; % wT(1) = wT_surf;
 
 % Reynolds-stress and heat terms
 gradRx = FD.CDS2_1(z, uw);
@@ -38,9 +38,9 @@ P_b = (settings.g/settings.potT0) .* (-alpha_t .* dTdz);
 T_k = FD.CDS2_1(z, nu_t/params.sig_k) .* dkdz + (nu_t/params.sig_k) .* FD.CDS2_2(z, k);
 
 % Pack shared context for model-specific prognostic equations
-S = struct('k',k,'e',e,'nu_t',nu_t,'alpha_t',alpha_t, ...
-           'dkdz',dkdz,'dedz',dedz,'P_s',P_s,'P_b',P_b,'T_k',T_k, ...
-           'ustar',ustar,'z',z);
+S = struct('k',k,'e',e,'nu_t',nu_t,'alpha_t',alpha_t,'dudz',dudz, ...
+           'dvdz',dvdz,'dkdz',dkdz,'dedz',dedz,'P_s',P_s,'P_b',P_b, ...
+           'T_k',T_k,'ustar',ustar,'z',z);
 
 % Dispatch turbulence-model RHS
 switch string(settings.turb_model)

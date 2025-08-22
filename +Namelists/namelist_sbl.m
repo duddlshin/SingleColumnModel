@@ -32,8 +32,9 @@ settings.Pr_t = 0.85;                                                      % Tur
 settings.g = 9.81;                                                         % Gravitational acceleration [m/s^2]
 settings.kappa = 0.40;                                                     % von Karman constant [-]
 settings.potT0 = 263.5;                                                    % Reference potential temperature [K]
-settings.coolingrate = -0.25;                                              % Surface cooling rate [K/h]
 settings.l_m = settings.kappa*settings.zCell./(1 + settings.kappa*settings.zCell/settings.lambda);    % Turbulent mixing length (Blackadar, 1962)
+settings.coolingrate = -0.25;                                              % Surface cooling rate [K/h]
+settings.potTs = 265;                                                      % Reference surface potential temperature [K]
 
 % Stability
 settings.A = 4.8;                                                          % Constant in stability formulation for momentum [-]

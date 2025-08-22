@@ -48,8 +48,8 @@ plot_settings;
 % Initial plot
 h = plot(ax, qoi(:, idx(1)), z, '-', 'LineWidth', opt.LineWidth);
 
-xlabel(ax, 'U [m s^{-1}]', 'Interpreter', 'latex');
-ylabel(ax, 'Height [m]',   'Interpreter', 'latex');
+xlabel(ax, '$u~[\mathrm{m~s^{-1}}]$', 'Interpreter', 'latex');
+ylabel(ax, '$z~[\mathrm{m}]$',   'Interpreter', 'latex');
 title(ax, sprintf('Frame %d/%d (column %d)', 1, nFrames, idx(1)));
 
 % ---- Preallocate movie frames -------------------------------------------

@@ -16,7 +16,7 @@ switch string(settings.casename)
         u = Gx * one;
         v = Gy * one;
         % Potential temperature 
-        T = 300 * one;
+        T = settings.potTs * one;
         % TKE
         k = 0.4*(1 - z./250).^3; k(z > 250) = 0; 
 
@@ -25,9 +25,9 @@ switch string(settings.casename)
         u = Gx * one;
         v = Gy * one;
         % Potential temperature
-        T = 265 + 0.01 * max(z - 100, 0);
+        T = settings.potTs + 0.01*(z - 100); T(z < 100) = settings.potTs;
         % TKE
-        k = 0.4*(1 - z./50).^3; k(z > 50) = 0; 
+        k = 0.4*(1 - z./50).^3; k(z > 50) = 0;
         
     case "channelflow"
         % Log-law velocity
@@ -35,7 +35,7 @@ switch string(settings.casename)
         v  = zeros(nz,1,'like',z);
         % Potential temperature not used in neutral channel
         T  = zeros(nz,1,'like',z);
-        % TKE 
+        % TKE
         k = 0.4*(1 - z./(z(end)/3)).^3; k(z > (z(end)/3)) = 0;
 
     otherwise

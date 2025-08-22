@@ -1,5 +1,5 @@
 function params = assign_params(turb_model, new_params)
-% ASSIGN_PARAMS: Assign new values to target parameters
+%ASSIGN_PARAMS: Assign new values to target parameters
 % Currently supports: "stdke", "mostke", "de85ke", "rngke"
 
 % Turbulence model switch
