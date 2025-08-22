@@ -4,7 +4,6 @@ Single-column model (SCM) for testing turbulence parameterizations in atmospheri
 
 ABL cases: 
 - Truly neutral boundary layer (TNBL)
-- Conventionally neutral boundary layer (CNBL)
 - Stable boundary layer (SBL)
 - Channel flow
 
